@@ -34,8 +34,9 @@ sudo ip addr add dev veth3 192.168.1.11/24
 sudo ip link set veth3 master br0
 
 
-# Set up NAT for traffic forwarding (optional, adjust based on your environment)
-sudo iptables -t nat -A POSTROUTING -o eth0 -j SNAT --to-source  192.168.1.1/24
+# Set up NAT for traffic forwarding (optional, adjust based on the environment)
+sudo iptables -t nat -L -n -v                                         # Checking the iptables rules
+sudo iptables -t nat -A POSTROUTING -s 192.168.1.0/24 -j MASQUERADE   # Enable NAT for internet connectivity
 
 # Verify connectivity between containers
 sudo docker exec nginx_container1 ping -c 3  192.168.1.11 
